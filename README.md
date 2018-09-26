@@ -4,6 +4,6 @@ Setup:
 
 Run python setup.py install
 
-Get API keys off of slack, add them to config.json
+Get API keys off of slack, add them to settings.json
 
-Run git update-index --skip-worktree config.json
+Run git update-index --skip-worktree settings.json
