@@ -13,11 +13,19 @@ def main(args=None):
     argparser = argparse.ArgumentParser(prog='ThreadedTweeter')
     argparser.add_argument('-t', '--thread', help='Path of thread file relative to current working directory', type=str)
     argparser.add_argument('-d', '--delimiter', help='Specify desired delimiter. Default: ---', default='---', type=str)
+    argparser.add_argument('-dr', '--dryrun', help='Checks thread for errors. Does not post to Twitter!', action='store_true')
     args = vars(argparser.parse_args())
 
-    if 'thread' in args:
+    if args['thread']:
         unparsed_thread_str = load_thread_file(args['thread'])
         parsed_thread = thread_parser(unparsed_thread_str, d=args['delimiter'])
-        api = twitter.Api(**TWITTER_CREDS)
-        for tweet in parsed_thread:
-            api.PostUpdate(tweet)
+        if not args['dryrun']:
+            api = twitter.Api(**TWITTER_CREDS)
+            for tweet in parsed_thread:
+                status = api.PostUpdate(tweet)
+                print('Posted tweet with status: ' + status.text)
+        else:
+            # implement dry run
+            unparsed_thread_str = load_thread_file(args['thread'])
+            parsed_thread = thread_parser(unparsed_thread_str, d=args['delimiter'])
+            print(parsed_thread)
