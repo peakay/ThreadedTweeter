@@ -8,5 +8,7 @@ setup(
         'console_scripts': [
             'tt = threaded_tweeter.main:main',
         ],
-    }
+    },
+    include_package_data=True,
+    data_files=[('settings.json')]
 )
