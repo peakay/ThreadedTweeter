@@ -1,8 +1,8 @@
 {
     "DEV" : {
         "CREDS" : {
-            "CONSUMER_KEY": "MOWyzHz9ocvopxX5CG58JD4Mj",
-            "CONSUMER_SECRET": "K4DVg78s5CT87SEdQKt2PacFfwiIDQykmrEMJRyxiK19f4hHya",
+            "CONSUMER_KEY": null,
+            "CONSUMER_SECRET": null,
             "ACCESS_TOKEN_KEY": null,
             "ACCESS_TOKEN_SECRET": null
         }
