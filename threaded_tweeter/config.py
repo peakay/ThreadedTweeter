@@ -1,7 +1,7 @@
 # dynamically loaded config
 import twitter
 import json
-from auth import get_access_token
+from auth.get_access_token import get_access_token
 
 # who needs fancy staging libraries
 STAGE = "TEST"
@@ -21,4 +21,3 @@ if not TWITTER_CREDS['ACCESS_TOKEN'] or not TWITTER_CREDS['ACCESS_SECRET']:
     with open('settings.json', 'w') as f:
         json.dump(config, f, indent = 4)
     print (token_key, token_secret)
-    pass
