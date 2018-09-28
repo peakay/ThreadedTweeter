@@ -1,18 +1,18 @@
 {
-    "THREADEDTWEETER" : {
-        "DEV" : {
-            "CREDS" : {
-                "CONSUMER_KEY": null,
-                "CONSUMER_SECRET": null,
-                "ACCESS_TOKEN": null,
-                "ACCESS_SECRET": null
-            }
-        },
-        "TEST": {
-            "CREDS" : {
-                "CONSUMER_KEY": "123456",
-                "CONSUMER_SECRET": "abcdefghijklmnopqrstuvwxyz"
-            }
+    "DEV" : {
+        "CREDS" : {
+            "CONSUMER_KEY": "MOWyzHz9ocvopxX5CG58JD4Mj",
+            "CONSUMER_SECRET": "K4DVg78s5CT87SEdQKt2PacFfwiIDQykmrEMJRyxiK19f4hHya",
+            "ACCESS_TOKEN_KEY": null,
+            "ACCESS_TOKEN_SECRET": null
+        }
+    },
+    "TEST": {
+        "CREDS" : {
+            "CONSUMER_KEY": null,
+            "CONSUMER_SECRET": null,
+            "ACCESS_TOKEN_KEY": null,
+            "ACCESS_TOKEN_SECRET": null
         }
     }
 }

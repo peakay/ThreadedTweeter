@@ -2,7 +2,7 @@ import argparse
 from .file_handler import load_thread_file
 from .base_parser import thread_parser
 from .config import TWITTER_CREDS
-import os
+import twitter
 
 
 def main(args=None):
@@ -15,9 +15,9 @@ def main(args=None):
     argparser.add_argument('-d', '--delimiter', help='Specify desired delimiter. Default: ---', default='---', type=str)
     args = vars(argparser.parse_args())
 
-    print(args)
     if 'thread' in args:
         unparsed_thread_str = load_thread_file(args['thread'])
         parsed_thread = thread_parser(unparsed_thread_str, d=args['delimiter'])
-        print(parsed_thread)
-        print(TWITTER_CREDS)
+        api = twitter.Api(**TWITTER_CREDS)
+        for tweet in parsed_thread:
+            api.PostUpdate(tweet)
