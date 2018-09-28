@@ -31,3 +31,4 @@ def main(args=None):
             unparsed_thread_str = load_thread_file(args['thread'])
             parsed_thread = thread_parser(unparsed_thread_str, d=args['delimiter'])
             print(parsed_thread)
+            print("Everything looks okay! :)")
