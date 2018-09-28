@@ -18,7 +18,7 @@ if not TWITTER_CREDS['ACCESS_TOKEN'] or not TWITTER_CREDS['ACCESS_SECRET']:
     token_key, token_secret = get_access_token.get_access_token(TWITTER_CREDS['CONSUMER_KEY'], TWITTER_CREDS['CONSUMER_SECRET']) 
     TWITTER_CREDS['ACCESS_TOKEN'] = token_key
     TWITTER_CREDS['ACCESS_SECRET'] = token_secret
-    with open('settinds.json', 'w') as f:
+    with open('settings.json', 'w') as f:
         json.dump(config, f, indent = 4)
     print (token_key, token_secret)
     pass
