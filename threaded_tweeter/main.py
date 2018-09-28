@@ -19,10 +19,12 @@ def main(args=None):
     if args['thread']:
         unparsed_thread_str = load_thread_file(args['thread'])
         parsed_thread = thread_parser(unparsed_thread_str, d=args['delimiter'])
+        reply_to = None
         if not args['dryrun']:
             api = twitter.Api(**TWITTER_CREDS)
             for tweet in parsed_thread:
-                status = api.PostUpdate(tweet)
+                status = api.PostUpdate(tweet, in_reply_to_status_id = reply_to)
+                reply_to = status.id
                 print('Posted tweet with status: ' + status.text)
         else:
             # implement dry run

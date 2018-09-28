@@ -6,6 +6,7 @@ from .auth import token_handler
 
 # who needs fancy staging libraries
 STAGE = "DEV"
+MODE = "CLIENT"
 
 # pathing stuff 
 basepath = path.dirname(__file__)
