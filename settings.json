@@ -10,8 +10,10 @@
         },
         "TEST": {
             "CREDS" : {
-                "CONSUMER_KEY": "123456",
-                "CONSUMER_SECRET": "abcdefghijklmnopqrstuvwxyz"
+                "CONSUMER_KEY": null,
+                "CONSUMER_SECRET": null,
+                "ACCESS_TOKEN": null,
+                "ACCESS_SECRET":null
             }
         }
     }
