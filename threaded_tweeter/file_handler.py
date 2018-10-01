@@ -10,4 +10,4 @@ def load_thread_file(path):
         return ''.join(f.readlines())
 
 def load_media_file(path):
-    pass
+    return open(path, "rb")
