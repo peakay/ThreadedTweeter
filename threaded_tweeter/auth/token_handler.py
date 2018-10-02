@@ -24,6 +24,16 @@ AUTHORIZATION_URL = 'https://api.twitter.com/oauth/authorize'
 SIGNIN_URL = 'https://api.twitter.com/oauth/authenticate'
 
 
+def confirm_keys(consumer_key, consumer_secret):
+    oauth_client = OAuth1Session(consumer_key, client_secret=consumer_secret)
+    
+    try:
+        resp = oauth_client.fetch_request_token(REQUEST_TOKEN_URL)
+    except ValueError as e:
+        return False
+    return True
+        
+
 def get_access_token(consumer_key, consumer_secret):
     oauth_client = OAuth1Session(consumer_key, client_secret=consumer_secret, callback_uri='oob')
 

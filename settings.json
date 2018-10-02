@@ -1,14 +1,14 @@
 {
-    "DEV" : {
-        "CREDS" : {
+    "DEV": {
+        "CREDS": {
             "CONSUMER_KEY": null,
             "CONSUMER_SECRET": null,
             "ACCESS_TOKEN_KEY": null,
-            "ACCESS_TOKEN_SECRET": null
+            "ACCESS_TOKEN_SECRET": null"
         }
     },
     "TEST": {
-        "CREDS" : {
+        "CREDS": {
             "CONSUMER_KEY": null,
             "CONSUMER_SECRET": null,
             "ACCESS_TOKEN_KEY": null,
