@@ -4,8 +4,9 @@
             "CONSUMER_KEY": null,
             "CONSUMER_SECRET": null,
             "ACCESS_TOKEN_KEY": null,
-            "ACCESS_TOKEN_SECRET": null"
-        }
+            "ACCESS_TOKEN_SECRET": null 
+        },
+        "KEYHASH": null 
     },
     "TEST": {
         "CREDS": {
@@ -13,6 +14,7 @@
             "CONSUMER_SECRET": null,
             "ACCESS_TOKEN_KEY": null,
             "ACCESS_TOKEN_SECRET": null
-        }
+        },
+        "KEYHASH": null
     }
 }

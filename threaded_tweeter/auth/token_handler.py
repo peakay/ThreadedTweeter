@@ -53,7 +53,7 @@ def get_access_token(consumer_key, consumer_secret):
           '\n\t{0}'.format(url))
 
     webbrowser.open(url)
-    pincode = input('\nEnter your pincode? ')
+    pincode = input('\nEnter your pincode: ')
 
     print('\nGenerating and signing request for an access token...\n')
 
