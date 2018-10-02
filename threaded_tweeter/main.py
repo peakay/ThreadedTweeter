@@ -50,3 +50,4 @@ def main(args=None):
             if status.user.id == user:
                 api.DestroyStatus(status.id)
                 print('Destroyed status: ' + status.text)
+
