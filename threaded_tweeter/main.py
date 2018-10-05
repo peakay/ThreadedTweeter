@@ -3,7 +3,7 @@ from .file_handler import load_thread_file, load_media_file
 from .base_parser import thread_parser
 from .config import TWITTER_CREDS
 import twitter
-
+import sys
 
 def main(args=None):
     """
@@ -17,7 +17,11 @@ def main(args=None):
     argparser.add_argument('-del', '--delete', 
                            help='Deletes all replies from your user in a thread following the given status ID', type=str)
     args = vars(argparser.parse_args())
-
+    
+    if not len(sys.argv) > 1:
+        print('usage: ThreadedTweeter [-h] [-t THREAD] [-d DELIMITER] [-dr]')
+        print('type \'tt --help\' for more information')
+        
     if args['thread']:
         unparsed_thread_str = load_thread_file(args['thread'])
         parsed_thread = thread_parser(unparsed_thread_str, d=args['delimiter'])

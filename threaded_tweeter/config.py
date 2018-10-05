@@ -29,6 +29,7 @@ m.update(all_key.encode('utf-8'))
 if m.hexdigest() == config[STAGE]['KEYHASH']:
     # TODO: implement logging/loglevel
     # print('Keys appear valid') 
+    pass
 else:
     temp_consumer_key = input('Enter your consumer key: ')
     temp_consumer_secret = input('Enter your consumer secret: ')
