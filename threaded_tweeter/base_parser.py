@@ -36,6 +36,7 @@ def tweet_parser(tweet):
 
     paths = re.findall(match_curly_brackets_no_space, tweet)
     paths = list(map(lambda e: e[3:-3], paths))
-    tweet = re.sub(match_curly_brackets_space, ' ', tweet) or tweet
-    tweet = re.sub(match_curly_brackets_no_space, '', tweet) or tweet
+    tweet = re.sub(match_curly_brackets_space, ' ', tweet)
+    tweet = re.sub(match_curly_brackets_no_space, '', tweet)
+        
     return tweet, paths
