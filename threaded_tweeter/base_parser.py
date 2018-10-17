@@ -8,7 +8,7 @@ def thread_parser(s, **options):
     """
     Splits the thread by delimiter + \n, then processes that thread by parsing out media paths
     :type s: str
-    :rtype: List[(str, str)]
+    :rtype: List[status object]
     """
 
     base_parsed_thread = s.split(options['d']+'\n')
@@ -28,7 +28,7 @@ def tweet_parser(tweet):
     """
     Parses the individual tweet by removing media paths
     :type s: str
-    :rtype: str, List[str]
+    :rtype: status object
     """
     match_curly_brackets_no_space = '\{\{\{.*?\}\}\}'
     match_curly_brackets_space = '\s\{\{\{.*?\}\}\}\s'

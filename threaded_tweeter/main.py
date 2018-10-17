@@ -24,11 +24,11 @@ def main(args=None):
         reply_to = None
         if not args['dryrun']:
             api = twitter.Api(**TWITTER_CREDS)
-            for tweet, paths in parsed_thread:
-                status = api.PostUpdate(tweet, in_reply_to_status_id = reply_to,
-                                        media = list(map(lambda e: load_media_file(e), paths)))
-                reply_to = status.id
-                print('Posted tweet with status: ' + status.text)
+            for status in parsed_thread:
+                ret = api.PostUpdate(status.tweet, in_reply_to_status_id = reply_to,
+                                        media = list(map(lambda e: load_media_file(e), status.paths)))
+                reply_to = ret.id
+                print('Posted tweet with status: ' + ret.text)
         else:
             # implement dry run
             unparsed_thread_str = load_thread_file(args['thread'])
