@@ -1,6 +1,7 @@
 import json
 from twitter.twitter_utils import calc_expected_status_length
 import re
+from .status import Status
 
 
 def thread_parser(s, **options):
@@ -11,19 +12,17 @@ def thread_parser(s, **options):
     """
 
     base_parsed_thread = s.split(options['d']+'\n')
-    media_parsed_thread = []
+    status = []
 
     for tweet in base_parsed_thread:
-        tweet, media_paths = tweet_parser(tweet)
-        media_parsed_thread.append((tweet, media_paths))
+        status.append(tweet_parser(tweet))
 
-
-    invalid_lengths = list(filter(lambda e: calc_expected_status_length(e[0]) >= 240, media_parsed_thread))
+    invalid_lengths = list(filter(lambda e: calc_expected_status_length(e.tweet) >= 240, status))
 
     if len(invalid_lengths) != 0:
         print(invalid_lengths)
         raise Exception('Above tweets have invalid lengths')
-    return media_parsed_thread
+    return status
 
 def tweet_parser(tweet):
     """
@@ -39,4 +38,4 @@ def tweet_parser(tweet):
     tweet = re.sub(match_curly_brackets_space, ' ', tweet)
     tweet = re.sub(match_curly_brackets_no_space, '', tweet)
         
-    return tweet, paths
+    return Status(tweet, paths)
