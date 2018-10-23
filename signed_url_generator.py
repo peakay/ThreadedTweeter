@@ -6,8 +6,8 @@ import requests
 upload_key = uuid.uuid4().hex
 
 session = boto3.session.Session(
-      aws_access_key_id='AKIAICD2YSSP6ZTF75FA', 
-      aws_secret_access_key='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')
+      aws_access_key_id='###', 
+      aws_secret_access_key='###')
 
 s3 = session.client('s3')
 fields = {"acl": "public-read"}
