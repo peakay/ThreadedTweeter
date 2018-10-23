@@ -11,15 +11,15 @@ def main(args=None):
     TODO: make arg parsing more specific to input type
     """
     argparser = argparse.ArgumentParser(prog='ThreadedTweeter')
-    argparser.add_argument('-t', '--thread', help='Path of thread file relative to current working directory', type=str)
+    argparser.add_argument('-i', '--input', help='Path of thread file relative to current working directory', type=str)
     argparser.add_argument('-d', '--delimiter', help='Specify desired delimiter. Default: ---', default='---', type=str)
-    argparser.add_argument('-dr', '--dryrun', help='Checks thread for errors. Does not post to Twitter!', action='store_true')
-    argparser.add_argument('-del', '--delete', 
+    argparser.add_argument('-n', '--dry-run', help='Checks thread for errors. Does not post to Twitter!', action='store_true')
+    argparser.add_argument('-r', '--remove', 
                            help='Deletes all replies from your user in a thread following the given status ID', type=str)
     args = vars(argparser.parse_args())
     
     if not len(sys.argv) > 1:
-        print('usage: ThreadedTweeter [-h] [-t THREAD] [-d DELIMITER] [-dr]')
+        print('usage: ThreadedTweeter [-h] [-i FILE] [-d DELIMITER] [-n] [-r STATUS_ID]')
         print('type \'tt --help\' for more information')
         
     if args['thread']:
