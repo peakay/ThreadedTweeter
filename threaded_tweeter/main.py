@@ -1,7 +1,7 @@
 import argparse
 from .file_handler import load_thread_file, load_media_file
 from .base_parser import thread_parser
-from .config import TWITTER_CREDS
+from .config import TWITTER_CREDS, THREADED_TWEETER_URL
 import twitter
 import sys
 import requests
@@ -29,10 +29,10 @@ def main(args=None):
         unparsed_thread_str = load_thread_file(args['input'])
         parsed_thread = thread_parser(unparsed_thread_str, d=args['delimiter'])
         if not args['dry']:
-            thread = {'TWEETS': []}
+            json_thread = {'TWEETS': []}
             for status in parsed_thread:
-                thread['TWEETS'].append(status.convert_to_dict())
-            res = requests.post('https://api.threadedtweeter.com/post-thread', data=json.dumps(thread), cookies=TWITTER_CREDS)
+                json_thread['TWEETS'].append(status.convert_to_dict())
+            res = requests.post(f'{THREADED_TWEETER_URL}/post-thread', data=json.dumps(json_thread), cookies=TWITTER_CREDS)
             print('Posted Tweets:')
             for i, tweet in enumerate(json.loads(res.content.decode()), start=1):
                 print(f'#{i}: {tweet}')

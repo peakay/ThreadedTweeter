@@ -1,5 +1,6 @@
 import requests
 from .file_handler import load_thread_file, load_media_file
+from .config import THREADED_TWEETER_URL
 
 
 S3_BASE_URL = 'https://s3.amazonaws.com/threadtweeter-media'
@@ -11,7 +12,7 @@ class Status:
         medias = list(map(lambda e: load_media_file(e), paths))
         self.uploaded_medias = []
         for media in medias:
-            post_form_data = requests.get('https://api.threadedtweeter.com/upload').json()
+            post_form_data = requests.get(f'{THREADED_TWEETER_URL}/upload').json()
             files={'file': media}
             post_res = requests.post(post_form_data['url'], data=post_form_data['fields'], files=files)
             self.uploaded_medias.append(f'{S3_BASE_URL}/{post_form_data["fields"]["key"][:-12]}/{media.name}')
