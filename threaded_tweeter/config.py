@@ -1,5 +1,7 @@
 # dynamically loaded config
 import twitter
+import requests
+import webbrowser
 from os import path
 import json
 import hashlib
@@ -39,13 +41,31 @@ if m.hexdigest() == config[STAGE]['KEYHASH']:
 
 #if the hashes do not match, it is assumed none of the credentials are valid and must be acquired
 else:
+    payload = {'mode': 'CLI'}
+    res = requests.get(url='https://api.threadedtweeter.com/login', params=payload)
+            
+    stuff = res.json()
+    url = stuff['url']
+    url_pieces = url.split('=')
+    oauth_token = url_pieces[1]
+    print (oauth_token)
 
-    #acquire consumer or 'app' keys from the user through standard input
+    webbrowser.open(url)
+    verifier = input('\nEnter your verifier token: ')
+
+    payload = {'oauth_token': oauth_token, 'oauth_verifier': verifier}
+    res = requests.get(url='https://api.threadedtweeter.com/login/verify', params=payload, cookies=res.cookies)
+
+    token_key = res.cookies['access_key']
+    token_secret = res.cookies['access_secret']
+
+    '''
+    acquire consumer or 'app' keys from the user through standard input
     temp_consumer_key = input('Enter your consumer key: ')
     temp_consumer_secret = input('Enter your consumer secret: ')
 
     consumer_key_tries = 0
-
+    
     #give user 5 tries to try typing in their keys, confirm_keys() checks if keys get response from twitter's server
     while not token_handler.confirm_keys(temp_consumer_key, temp_consumer_secret) and consumer_key_tries < 5:
         print('Invalid keys, or twitter is not responding, make sure your keys are right and try again')
@@ -66,7 +86,8 @@ else:
     #get_access_token() performs the authorization process and returns token keys
     token_key, token_secret = token_handler.get_access_token(config[STAGE]['CREDS']['CONSUMER_KEY'], 
                                                              config[STAGE]['CREDS']['CONSUMER_SECRET'])
-    
+    '''
+
     #store token keys in json object
     config[STAGE]['CREDS']['ACCESS_TOKEN_KEY'] = token_key
     config[STAGE]['CREDS']['ACCESS_TOKEN_SECRET'] = token_secret
@@ -75,7 +96,8 @@ else:
     TWITTER_CREDS = {key.lower():value for (key, value) in config[STAGE]['CREDS'].items()}
     all_key = 'tweet'
     for key in TWITTER_CREDS:
-        all_key += TWITTER_CREDS[key]
+        if TWITTER_CREDS[key] is not None:
+            all_key += TWITTER_CREDS[key]
 
     m = hashlib.sha256()
     m.update(all_key.encode('utf-8'))

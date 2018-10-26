@@ -1,0 +1,15 @@
+{
+    "TWEETS": 
+    [
+        {"STATUS":"we are tweeting",
+        "MEDIA": []},
+        {"STATUS":"a connected thread of tweets",
+        "MEDIA": []},
+        {"STATUS":"using tt",
+        "MEDIA": []},
+        {"STATUS":"we can do pictures too",
+        "MEDIA": []}
+    ]
+}
+
+
