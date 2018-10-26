@@ -18,12 +18,19 @@ from __future__ import print_function
 from requests_oauthlib import OAuth1Session
 import webbrowser
 
+
+#module mostly written by trent
+#get_access_token largely taken from https://github.com/bear/python-twitter get_access_token.py
+#confirm_keys has some general basis
+
 REQUEST_TOKEN_URL = 'https://api.twitter.com/oauth/request_token'
 ACCESS_TOKEN_URL = 'https://api.twitter.com/oauth/access_token'
 AUTHORIZATION_URL = 'https://api.twitter.com/oauth/authorize'
 SIGNIN_URL = 'https://api.twitter.com/oauth/authenticate'
 
-
+#confirm_keys() asks server for an auth session with the parameter keys, any response is considered a pass
+#any failure at response is considered a failure to authenticate the consumer keys
+#TO DO: differentiate exception based on response (i.e. network failure vs. bad keys)
 def confirm_keys(consumer_key, consumer_secret):
     oauth_client = OAuth1Session(consumer_key, client_secret=consumer_secret)
     
@@ -33,8 +40,9 @@ def confirm_keys(consumer_key, consumer_secret):
         return False
     return True
         
-
+#function takes consumer keys and returns token keys
 def get_access_token(consumer_key, consumer_secret):
+    #setup oauth session using consumer keys and 'pin code' authentication method
     oauth_client = OAuth1Session(consumer_key, client_secret=consumer_secret, callback_uri='oob')
 
     print('\nRequesting temp token from Twitter...\n')
@@ -52,11 +60,13 @@ def get_access_token(consumer_key, consumer_secret):
           'in the next step to obtaining an Authentication Token: \n'
           '\n\t{0}'.format(url))
 
+    #launch browser to authentication url to get to login, authentication process, and pin retrieval 
     webbrowser.open(url)
     pincode = input('\nEnter your pincode: ')
 
     print('\nGenerating and signing request for an access token...\n')
 
+    #setup oauth session to get token keys
     oauth_client = OAuth1Session(consumer_key, client_secret=consumer_secret,
                                  resource_owner_key=resp.get('oauth_token'),
                                  resource_owner_secret=resp.get('oauth_token_secret'),
@@ -66,8 +76,11 @@ def get_access_token(consumer_key, consumer_secret):
     except ValueError as e:
         raise 'Invalid response from Twitter requesting temp token: {0}'.format(e)
 
+    #exception above will be raised if key fetch failed, otherwise function will return token keys here
     return resp.get('oauth_token'), resp.get('oauth_token_secret')
 
+
+#code below is from source, can probably be deleted
 def main():
     consumer_key = input('Enter your consumer key: ')
     consumer_secret = input('Enter your consumer secret: ')
