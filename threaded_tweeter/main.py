@@ -4,6 +4,9 @@ from .base_parser import thread_parser
 from .config import TWITTER_CREDS
 import twitter
 import sys
+import requests
+import json
+
 
 def main(args=None):
     """
@@ -25,15 +28,32 @@ def main(args=None):
     if args['input']:
         unparsed_thread_str = load_thread_file(args['input'])
         parsed_thread = thread_parser(unparsed_thread_str, d=args['delimiter'])
-        reply_to = None
         if not args['dry']:
+            thread = {'TWEETS': []}
             for status in parsed_thread:
-                print(status.tweet)
+                thread['TWEETS'].append(status.convert_to_dict())
+            res = requests.post('https://api.threadedtweeter.com/post-thread', data=json.dumps(thread), cookies=TWITTER_CREDS)
+            print(res.content)
+            
         else:
             # implement dry run
             unparsed_thread_str = load_thread_file(args['thread'])
             parsed_thread = thread_parser(unparsed_thread_str, d=args['delimiter'])
             print(parsed_thread)
             print("Everything looks okay! :)")
+        
         return
+    
+    #if args['delete']:
+        # todo: might want to make it so that it only deletes tweets that are in reply to the same user?
+        #api = twitter.Api(**TWITTER_CREDS)
+        #user = api.VerifyCredentials().id
+        
+        #statuses = api.GetReplies(args['delete'], trim_user=True)
+        #head = api.DestroyStatus(args['delete'])
+        #print('Destroyed status: ' + head.text)
+        #for status in statuses:
+        #    if status.user.id == user:
+        #        api.DestroyStatus(status.id)
+        #        print('Destroyed status: ' + status.text)
 

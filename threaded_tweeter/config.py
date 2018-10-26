@@ -50,7 +50,6 @@ else:
 
     payload = {'oauth_verifier': verifier}
     res = requests.get(url='https://api.threadedtweeter.com/login/verify', params=payload, cookies=res.cookies)
-
     token_key = res.cookies['access_key']
     token_secret = res.cookies['access_secret']
 

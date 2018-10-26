@@ -1,4 +1,3 @@
-from requests_oauthlib import OAuth1, OAuth2
 import twitter
 import json
 import os
@@ -11,6 +10,6 @@ class ThreadedTweeter:
     def post_thread(self, status_json):
         reply_to = None
         for tweet in status_json['TWEETS']:
-                print (tweet['STATUS'])
-                status = self.api.PostUpdate(tweet['STATUS'], in_reply_to_status_id = reply_to, media=tweet['MEDIA'])
+                print(tweet['STATUS'], tweet['MEDIA'])
+                status = self.api.PostUpdate(tweet['STATUS'], in_reply_to_status_id = reply_to)
                 reply_to = status.id
