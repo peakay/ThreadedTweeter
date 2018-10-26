@@ -45,60 +45,64 @@ if m.hexdigest() == config[STAGE]['KEYHASH']:
 else:
     payload = {'mode': 'CLI'}
     res = requests.get(url=f'{THREADED_TWEETER_URL}/login', params=payload)
-            
-    url = res.json()['url']
-    webbrowser.open(url)
-    verifier = input('\nEnter your verifier token: ')
+    cont = input('Will open Twitter auth page in browser. Continue? (Y/N) ')
 
-    payload = {'oauth_verifier': verifier}
-    res = requests.get(url=f'{THREADED_TWEETER_URL}/login/verify', params=payload, cookies=res.cookies)
-    token_key = res.cookies['access_key']
-    token_secret = res.cookies['access_secret']
+    if cont.lower() == "y":
+        url = res.json()['url']
+        webbrowser.open(url)
+        verifier = input('\nEnter your verifier token: ')
 
-    '''
-    acquire consumer or 'app' keys from the user through standard input
-    temp_consumer_key = input('Enter your consumer key: ')
-    temp_consumer_secret = input('Enter your consumer secret: ')
+        payload = {'oauth_verifier': verifier}
+        res = requests.get(url=f'{THREADED_TWEETER_URL}/login/verify', params=payload, cookies=res.cookies)
+        token_key = res.cookies['access_key']
+        token_secret = res.cookies['access_secret']
 
-    consumer_key_tries = 0
-    
-    #give user 5 tries to try typing in their keys, confirm_keys() checks if keys get response from twitter's server
-    while not token_handler.confirm_keys(temp_consumer_key, temp_consumer_secret) and consumer_key_tries < 5:
-        print('Invalid keys, or twitter is not responding, make sure your keys are right and try again')
+        '''
+        acquire consumer or 'app' keys from the user through standard input
         temp_consumer_key = input('Enter your consumer key: ')
         temp_consumer_secret = input('Enter your consumer secret: ')
-        consumer_key_tries += 1
 
-    #with enough failures the process exits early with an exception
-    if consumer_key_tries >= 5:
-        raise Exception('Your consumer key pair appears to be invalid '+
-                        'It is also possible you are experiencing a network error '+
-                        'Please try again later and make sure your keys are correct and valid.')
+        consumer_key_tries = 0
+        
+        #give user 5 tries to try typing in their keys, confirm_keys() checks if keys get response from twitter's server
+        while not token_handler.confirm_keys(temp_consumer_key, temp_consumer_secret) and consumer_key_tries < 5:
+            print('Invalid keys, or twitter is not responding, make sure your keys are right and try again')
+            temp_consumer_key = input('Enter your consumer key: ')
+            temp_consumer_secret = input('Enter your consumer secret: ')
+            consumer_key_tries += 1
 
-    #we store the now validated consumer keys in our json object
-    config[STAGE]['CREDS']['CONSUMER_KEY'] = temp_consumer_key
-    config[STAGE]['CREDS']['CONSUMER_SECRET'] = temp_consumer_secret    
+        #with enough failures the process exits early with an exception
+        if consumer_key_tries >= 5:
+            raise Exception('Your consumer key pair appears to be invalid '+
+                            'It is also possible you are experiencing a network error '+
+                            'Please try again later and make sure your keys are correct and valid.')
 
-    #get_access_token() performs the authorization process and returns token keys
-    token_key, token_secret = token_handler.get_access_token(config[STAGE]['CREDS']['CONSUMER_KEY'], 
-                                                             config[STAGE]['CREDS']['CONSUMER_SECRET'])
-    '''
+        #we store the now validated consumer keys in our json object
+        config[STAGE]['CREDS']['CONSUMER_KEY'] = temp_consumer_key
+        config[STAGE]['CREDS']['CONSUMER_SECRET'] = temp_consumer_secret    
 
-    #store token keys in json object
-    config[STAGE]['CREDS']['ACCESS_TOKEN_KEY'] = token_key
-    config[STAGE]['CREDS']['ACCESS_TOKEN_SECRET'] = token_secret
+        #get_access_token() performs the authorization process and returns token keys
+        token_key, token_secret = token_handler.get_access_token(config[STAGE]['CREDS']['CONSUMER_KEY'], 
+                                                                config[STAGE]['CREDS']['CONSUMER_SECRET'])
+        '''
 
-    #compute hash over credentials (the four keys) and store in json object
-    TWITTER_CREDS = {key.lower():value for (key, value) in config[STAGE]['CREDS'].items()}
-    all_key = 'tweet'
-    for key in TWITTER_CREDS:
-        if TWITTER_CREDS[key] is not None:
-            all_key += TWITTER_CREDS[key]
+        #store token keys in json object
+        config[STAGE]['CREDS']['ACCESS_TOKEN_KEY'] = token_key
+        config[STAGE]['CREDS']['ACCESS_TOKEN_SECRET'] = token_secret
 
-    m = hashlib.sha256()
-    m.update(all_key.encode('utf-8'))
-    config[STAGE]['KEYHASH'] = m.hexdigest()
+        #compute hash over credentials (the four keys) and store in json object
+        TWITTER_CREDS = {key.lower():value for (key, value) in config[STAGE]['CREDS'].items()}
+        all_key = 'tweet'
+        for key in TWITTER_CREDS:
+            if TWITTER_CREDS[key] is not None:
+                all_key += TWITTER_CREDS[key]
 
-    #write out settings.json with validated keys and hash over those keys
-    with open(setting_path, 'w') as f:
-        json.dump(config, f, indent = 4)
+        m = hashlib.sha256()
+        m.update(all_key.encode('utf-8'))
+        config[STAGE]['KEYHASH'] = m.hexdigest()
+
+        #write out settings.json with validated keys and hash over those keys
+        with open(setting_path, 'w') as f:
+            json.dump(config, f, indent = 4)
+    else:
+        print('Cannot complete setup without authentication')

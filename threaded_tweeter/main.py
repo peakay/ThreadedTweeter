@@ -33,8 +33,10 @@ def main(args=None):
             for status in parsed_thread:
                 thread['TWEETS'].append(status.convert_to_dict())
             res = requests.post('https://api.threadedtweeter.com/post-thread', data=json.dumps(thread), cookies=TWITTER_CREDS)
-            print(res.content)
-            
+            print('Posted Tweets:')
+            for i, tweet in enumerate(json.loads(res.content.decode()), start=1):
+                print(f'#{i}: {tweet}')
+
         else:
             # implement dry run
             unparsed_thread_str = load_thread_file(args['thread'])
