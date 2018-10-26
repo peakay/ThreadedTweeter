@@ -58,8 +58,8 @@ else:
 
     payload = {'oauth_verifier': verifier}
     res = requests.get(url=f'{THREADED_TWEETER_URL}/login/verify', params=payload, cookies=res.cookies)
-    token_key = res.cookies['access_key']
-    token_secret = res.cookies['access_secret']
+    token_key = res.cookies['access_token_key']
+    token_secret = res.cookies['access_token_secret']
 
     '''
     acquire consumer or 'app' keys from the user through standard input
