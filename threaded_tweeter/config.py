@@ -13,6 +13,8 @@ from .auth import token_handler
 # who needs fancy staging libraries
 STAGE = 'DEV'
 MODE = 'CLIENT'
+THREADED_TWEETER_URL = 'https://api.threadedtweeter.com'
+
 
 # pathing stuff for json file
 basepath = path.dirname(__file__)
@@ -42,14 +44,14 @@ if m.hexdigest() == config[STAGE]['KEYHASH']:
 #if the hashes do not match, it is assumed none of the credentials are valid and must be acquired
 else:
     payload = {'mode': 'CLI'}
-    res = requests.get(url='https://api.threadedtweeter.com/login', params=payload)
+    res = requests.get(url=f'{THREADED_TWEETER_URL}/login', params=payload)
             
     url = res.json()['url']
     webbrowser.open(url)
     verifier = input('\nEnter your verifier token: ')
 
     payload = {'oauth_verifier': verifier}
-    res = requests.get(url='https://api.threadedtweeter.com/login/verify', params=payload, cookies=res.cookies)
+    res = requests.get(url=f'{THREADED_TWEETER_URL}/login/verify', params=payload, cookies=res.cookies)
     token_key = res.cookies['access_key']
     token_secret = res.cookies['access_secret']
 

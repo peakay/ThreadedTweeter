@@ -1,6 +1,7 @@
 import requests
 from .file_handler import load_thread_file, load_media_file
 
+
 S3_BASE_URL = 'https://s3.amazonaws.com/threadtweeter-media'
 
 class Status:
@@ -14,6 +15,7 @@ class Status:
             files={'file': media}
             post_res = requests.post(post_form_data['url'], data=post_form_data['fields'], files=files)
             self.uploaded_medias.append(f'{S3_BASE_URL}/{post_form_data["fields"]["key"][:-12]}/{media.name}')
+
     def convert_to_dict(self):
         return {
             'STATUS': self.tweet,
