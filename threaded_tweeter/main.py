@@ -13,26 +13,29 @@ def main(args=None):
     argparser = argparse.ArgumentParser(prog='ThreadedTweeter')
     argparser.add_argument('-i', '--input', help='Path of thread file relative to current working directory', type=str)
     argparser.add_argument('-d', '--delimiter', help='Specify desired delimiter. Default: ---', default='---', type=str)
-    argparser.add_argument('-n', '--dry-run', help='Checks thread for errors. Does not post to Twitter!', action='store_true')
+    argparser.add_argument('-n', '--dry', help='Checks thread for errors. Does not post to Twitter!', action='store_true')
     argparser.add_argument('-r', '--remove', 
                            help='Deletes all replies from your user in a thread following the given status ID', type=str)
     args = vars(argparser.parse_args())
     
     if not len(sys.argv) > 1:
-        print('usage: ThreadedTweeter [-h] [-i FILE] [-d DELIMITER] [-n] [-r STATUS_ID]')
+        print('usage: ThreadedTweeter [-h] [-i THREAD] [-d DELIMITER] [-n]')
         print('type \'tt --help\' for more information')
         
-    if args['thread']:
-        unparsed_thread_str = load_thread_file(args['thread'])
+    if args['input']:
+        unparsed_thread_str = load_thread_file(args['input'])
         parsed_thread = thread_parser(unparsed_thread_str, d=args['delimiter'])
         reply_to = None
-        if not args['dryrun']:
-            api = twitter.Api(**TWITTER_CREDS)
+        if not args['dry']:
+            #api = twitter.Api(**TWITTER_CREDS)
+
+
             for tweet, paths in parsed_thread:
-                status = api.PostUpdate(tweet, in_reply_to_status_id = reply_to,
-                                        media = list(map(lambda e: load_media_file(e), paths)))
-                reply_to = status.id
-                print('Posted tweet with status: ' + status.text)
+                    print (tweet)
+             #   status = api.PostUpdate(tweet, in_reply_to_status_id = reply_to,
+              #                          media = list(map(lambda e: load_media_file(e), paths)))
+               # reply_to = status.id
+                #print('Posted tweet with status: ' + status.text)
         else:
             # implement dry run
             unparsed_thread_str = load_thread_file(args['thread'])
@@ -42,16 +45,16 @@ def main(args=None):
         
         return
     
-    if args['delete']:
+    #if args['delete']:
         # todo: might want to make it so that it only deletes tweets that are in reply to the same user?
-        api = twitter.Api(**TWITTER_CREDS)
-        user = api.VerifyCredentials().id
+        #api = twitter.Api(**TWITTER_CREDS)
+        #user = api.VerifyCredentials().id
         
-        statuses = api.GetReplies(args['delete'], trim_user=True)
-        head = api.DestroyStatus(args['delete'])
-        print('Destroyed status: ' + head.text)
-        for status in statuses:
-            if status.user.id == user:
-                api.DestroyStatus(status.id)
-                print('Destroyed status: ' + status.text)
+        #statuses = api.GetReplies(args['delete'], trim_user=True)
+        #head = api.DestroyStatus(args['delete'])
+        #print('Destroyed status: ' + head.text)
+        #for status in statuses:
+        #    if status.user.id == user:
+        #        api.DestroyStatus(status.id)
+        #        print('Destroyed status: ' + status.text)
 
