@@ -44,16 +44,11 @@ else:
     payload = {'mode': 'CLI'}
     res = requests.get(url='https://api.threadedtweeter.com/login', params=payload)
             
-    stuff = res.json()
-    url = stuff['url']
-    url_pieces = url.split('=')
-    oauth_token = url_pieces[1]
-    print (oauth_token)
-
+    url = res.json()['url']
     webbrowser.open(url)
     verifier = input('\nEnter your verifier token: ')
 
-    payload = {'oauth_token': oauth_token, 'oauth_verifier': verifier}
+    payload = {'oauth_verifier': verifier}
     res = requests.get(url='https://api.threadedtweeter.com/login/verify', params=payload, cookies=res.cookies)
 
     token_key = res.cookies['access_key']

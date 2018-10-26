@@ -27,34 +27,13 @@ def main(args=None):
         parsed_thread = thread_parser(unparsed_thread_str, d=args['delimiter'])
         reply_to = None
         if not args['dry']:
-            #api = twitter.Api(**TWITTER_CREDS)
-
-
-            for tweet, paths in parsed_thread:
-                    print (tweet)
-             #   status = api.PostUpdate(tweet, in_reply_to_status_id = reply_to,
-              #                          media = list(map(lambda e: load_media_file(e), paths)))
-               # reply_to = status.id
-                #print('Posted tweet with status: ' + status.text)
+            for status in parsed_thread:
+                print(status.tweet)
         else:
             # implement dry run
             unparsed_thread_str = load_thread_file(args['thread'])
             parsed_thread = thread_parser(unparsed_thread_str, d=args['delimiter'])
             print(parsed_thread)
             print("Everything looks okay! :)")
-        
         return
-    
-    #if args['delete']:
-        # todo: might want to make it so that it only deletes tweets that are in reply to the same user?
-        #api = twitter.Api(**TWITTER_CREDS)
-        #user = api.VerifyCredentials().id
-        
-        #statuses = api.GetReplies(args['delete'], trim_user=True)
-        #head = api.DestroyStatus(args['delete'])
-        #print('Destroyed status: ' + head.text)
-        #for status in statuses:
-        #    if status.user.id == user:
-        #        api.DestroyStatus(status.id)
-        #        print('Destroyed status: ' + status.text)
 
