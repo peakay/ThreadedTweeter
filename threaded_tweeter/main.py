@@ -1,9 +1,12 @@
 import argparse
 from .file_handler import load_thread_file, load_media_file
 from .base_parser import thread_parser
-from .config import TWITTER_CREDS
+from .config import TWITTER_CREDS, THREADED_TWEETER_URL
 import twitter
 import sys
+import requests
+import json
+
 
 def main(args=None):
     """
@@ -25,17 +28,15 @@ def main(args=None):
     if args['input']:
         unparsed_thread_str = load_thread_file(args['input'])
         parsed_thread = thread_parser(unparsed_thread_str, d=args['delimiter'])
-        reply_to = None
         if not args['dry']:
-            #api = twitter.Api(**TWITTER_CREDS)
+            json_thread = {'TWEETS': []}
+            for status in parsed_thread:
+                json_thread['TWEETS'].append(status.convert_to_dict())
+            res = requests.post(f'{THREADED_TWEETER_URL}/post-thread', data=json.dumps(json_thread), cookies=TWITTER_CREDS)
+            print('Posted Tweets:')
+            for i, tweet in enumerate(json.loads(res.content.decode()), start=1):
+                print(f'#{i}: {tweet}')
 
-
-            for tweet, paths in parsed_thread:
-                    print (tweet)
-             #   status = api.PostUpdate(tweet, in_reply_to_status_id = reply_to,
-              #                          media = list(map(lambda e: load_media_file(e), paths)))
-               # reply_to = status.id
-                #print('Posted tweet with status: ' + status.text)
         else:
             # implement dry run
             unparsed_thread_str = load_thread_file(args['thread'])
