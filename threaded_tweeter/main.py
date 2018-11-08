@@ -11,7 +11,7 @@ import json
 def main(args=None):
     """
     :type args: list probably
-    TODO: make arg parsing more specific to input type
+    TODO: add verbosity and implement better stacktrace returns from lambda
     """
     argparser = argparse.ArgumentParser(prog='ThreadedTweeter')
     argparser.add_argument('-i', '--input', help='Path of thread file relative to current working directory', type=str)

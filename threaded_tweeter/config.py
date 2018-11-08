@@ -56,7 +56,12 @@ else:
     verifier = input('\nEnter your verifier token: ')
 
     payload = {'oauth_verifier': verifier}
-    res = requests.get(url=f'{THREADED_TWEETER_URL}/login/verify', params=payload, cookies=res.cookies)
+    try:
+        res = requests.get(url=f'{THREADED_TWEETER_URL}/login/verify', params=payload, cookies=res.cookies)
+        res.raise_for_status()
+    except requests.exceptions.HTTPError as e:
+        print(f'Failed to login: {json.loads(res.content.decode())["errorMessage"]}')
+        sys.exit()
     token_key = res.cookies['access_token_key']
     token_secret = res.cookies['access_token_secret']
 
