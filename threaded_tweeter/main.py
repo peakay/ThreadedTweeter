@@ -32,11 +32,15 @@ def main(args=None):
             json_thread = {'TWEETS': []}
             for status in parsed_thread:
                 json_thread['TWEETS'].append(status.convert_to_dict())
-            res = requests.post(f'{THREADED_TWEETER_URL}/post-thread', data=json.dumps(json_thread), cookies=TWITTER_CREDS)
-            print('Posted Tweets:')
-            for i, tweet in enumerate(json.loads(res.content.decode()), start=1):
+            try:
+                res = requests.post(f'{THREADED_TWEETER_URL}/post-thread', data=json.dumps(json_thread), cookies=TWITTER_CREDS)
+                print(res.content)
+                res.raise_for_status()
+            except requests.exceptions.HTTPError as e:
+                return f'Failed to post thread: {json.loads(res.content.decode())["errorMessage"]}'
+            res = json.loads(res.content.decode())
+            for i, tweet in enumerate(res, start=1):
                 print(f'#{i}: {tweet}')
-
         else:
             # implement dry run
             unparsed_thread_str = load_thread_file(args['thread'])
