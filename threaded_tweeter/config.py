@@ -43,6 +43,8 @@ if m.hexdigest() == config[STAGE]['KEYHASH']:
 
 #if the hashes do not match, it is assumed none of the credentials are valid and must be acquired
 else:
+
+    #asks backend for a url to authorize, ask if the use wants to go to a webpage
     payload = {'mode': 'CLI'}
     res = requests.get(url=f'{THREADED_TWEETER_URL}/login', params=payload)
     cont = input('Will open Twitter auth page in browser. Continue? (Y/N) ')
@@ -51,10 +53,12 @@ else:
         print('Cannot complete setup without authentication.')
         sys.exit()
 
+    #opens authorization url and prompts for the verifier token, which the user will need to copy paste
     url = res.json()['url']
     webbrowser.open(url)
     verifier = input('\nEnter your verifier token: ')
 
+    #sends the verifier token and receives permanent access tokens for the users account
     payload = {'oauth_verifier': verifier}
     try:
         res = requests.get(url=f'{THREADED_TWEETER_URL}/login/verify', params=payload, cookies=res.cookies)
@@ -69,7 +73,7 @@ else:
     config[STAGE]['CREDS']['ACCESS_TOKEN_KEY'] = token_key
     config[STAGE]['CREDS']['ACCESS_TOKEN_SECRET'] = token_secret
 
-    #compute hash over credentials (the four keys) and store in json object
+    #compute hash over credentials (all four keys, though as of sprint two the CONSUMER keys are null) and store in json object
     TWITTER_CREDS = {key.lower():value for (key, value) in config[STAGE]['CREDS'].items()}
     all_key = 'tweet'
     for key in TWITTER_CREDS:
