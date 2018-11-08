@@ -11,7 +11,7 @@ import json
 def main(args=None):
     """
     :type args: list probably
-    TODO: make arg parsing more specific to input type
+    TODO: add verbosity and implement better stacktrace returns from lambda
     """
     argparser = argparse.ArgumentParser(prog='ThreadedTweeter')
     argparser.add_argument('-i', '--input', help='Path of thread file relative to current working directory', type=str)
@@ -31,17 +31,20 @@ def main(args=None):
         if not args['dry']:
             json_thread = {'TWEETS': []}
             for status in parsed_thread:
+                status.upload_media_to_s3()
                 json_thread['TWEETS'].append(status.convert_to_dict())
-            res = requests.post(f'{THREADED_TWEETER_URL}/post-thread', data=json.dumps(json_thread), cookies=TWITTER_CREDS)
-            print('Posted Tweets:')
-            for i, tweet in enumerate(json.loads(res.content.decode()), start=1):
+            try:
+                res = requests.post(f'{THREADED_TWEETER_URL}/post-thread', data=json.dumps(json_thread), cookies=TWITTER_CREDS)
+                res.raise_for_status()
+            except requests.exceptions.HTTPError as e:
+                return f'Failed to post thread: {json.loads(res.content.decode())["errorMessage"]}'
+            res = json.loads(res.content.decode())
+            for i, tweet in enumerate(res, start=1):
                 print(f'#{i}: {tweet}')
-
         else:
             # implement dry run
-            unparsed_thread_str = load_thread_file(args['thread'])
-            parsed_thread = thread_parser(unparsed_thread_str, d=args['delimiter'])
-            print(parsed_thread)
+            for i, status in enumerate(parsed_thread, start=1):
+                print(f'#{i}: {status}')
             print("Everything looks okay! :)")
         
         return

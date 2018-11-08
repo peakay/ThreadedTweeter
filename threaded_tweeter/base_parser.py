@@ -12,6 +12,7 @@ def thread_parser(s, **options):
     """
 
     base_parsed_thread = s.split(options['d']+'\n')
+    base_parsed_thread = list(map(lambda e: e.strip(), base_parsed_thread))
     status = []
 
     for tweet in base_parsed_thread:
