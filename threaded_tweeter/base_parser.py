@@ -15,9 +15,12 @@ def thread_parser(s, **options):
     status = []
 
     for tweet in base_parsed_thread:
-        status.append(tweet_parser(tweet))
+        if len(tweet) > 0:
+            status.append(tweet_parser(tweet))
+        #debug
+        #print (calc_expected_status_length(tweet))
 
-    invalid_lengths = list(filter(lambda e: calc_expected_status_length(e.tweet) >= 240, status))
+    invalid_lengths = list(filter(lambda e: calc_expected_status_length(e.tweet) > 280, status))
 
     if len(invalid_lengths) != 0:
         for bad_tweet in invalid_lengths:

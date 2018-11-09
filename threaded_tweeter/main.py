@@ -46,9 +46,8 @@ def main(args=None):
         if not args['dry']:
             json_thread = {'TWEETS': []}
             for status in parsed_thread:
-                if len(status.tweet) > 0 or len(status.medias) > 0:
-                    status.upload_media_to_s3()
-                    json_thread['TWEETS'].append(status.convert_to_dict())
+                status.upload_media_to_s3()
+                json_thread['TWEETS'].append(status.convert_to_dict())
             try:
                 res = requests.post(f'{THREADED_TWEETER_URL}/post-thread', data=json.dumps(json_thread), cookies=TWITTER_CREDS)
                 res.raise_for_status()
