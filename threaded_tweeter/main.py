@@ -7,6 +7,15 @@ import sys
 import requests
 import json
 
+debug_flag = False
+
+def exception_handler(exception_type, exception, traceback, debug_hook=sys.excepthook):
+    if debug_flag:
+        debug_hook(exception_type, exception, traceback)
+    else:
+        print ("%s: %s" % (exception_type.__name__, exception))
+
+sys.excepthook = exception_handler
 
 def main(args=None):
     """
@@ -26,13 +35,20 @@ def main(args=None):
         print('type \'tt --help\' for more information')
         
     if args['input']:
-        unparsed_thread_str = load_thread_file(args['input'])
-        parsed_thread = thread_parser(unparsed_thread_str, d=args['delimiter'])
+        try: 
+            unparsed_thread_str = load_thread_file(args['input'])
+            parsed_thread = thread_parser(unparsed_thread_str, d=args['delimiter'])
+
+        except Exception as e:
+            print (str(e))
+            sys.exit()
+
         if not args['dry']:
             json_thread = {'TWEETS': []}
             for status in parsed_thread:
-                status.upload_media_to_s3()
-                json_thread['TWEETS'].append(status.convert_to_dict())
+                if len(status.tweet) > 0 or len(status.medias) > 0:
+                    status.upload_media_to_s3()
+                    json_thread['TWEETS'].append(status.convert_to_dict())
             try:
                 res = requests.post(f'{THREADED_TWEETER_URL}/post-thread', data=json.dumps(json_thread), cookies=TWITTER_CREDS)
                 res.raise_for_status()

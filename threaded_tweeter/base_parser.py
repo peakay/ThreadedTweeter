@@ -10,7 +10,6 @@ def thread_parser(s, **options):
     :type s: str
     :rtype: List[status object]
     """
-
     base_parsed_thread = s.split(options['d']+'\n')
     base_parsed_thread = list(map(lambda e: e.strip(), base_parsed_thread))
     status = []
@@ -21,8 +20,10 @@ def thread_parser(s, **options):
     invalid_lengths = list(filter(lambda e: calc_expected_status_length(e.tweet) >= 240, status))
 
     if len(invalid_lengths) != 0:
-        print(invalid_lengths)
+        for bad_tweet in invalid_lengths:
+            print(bad_tweet.tweet)
         raise Exception('Above tweets have invalid lengths')
+    
     return status
 
 def tweet_parser(tweet):
