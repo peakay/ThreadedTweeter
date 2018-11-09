@@ -16,6 +16,7 @@ class Status:
             post_form_data = requests.get(f'{THREADED_TWEETER_URL}/upload').json()
             files={'file': media}
             post_res = requests.post(post_form_data['url'], data=post_form_data['fields'], files=files)
+            post_res.raise_on_status()
             self.uploaded_medias.append(f'{S3_BASE_URL}/{post_form_data["fields"]["key"][:-12]}/{media.name}')
     def convert_to_dict(self):
         return {
