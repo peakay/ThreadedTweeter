@@ -7,6 +7,15 @@ import sys
 import requests
 import json
 
+debug_flag = False
+
+def exception_handler(exception_type, exception, traceback, debug_hook=sys.excepthook):
+    if debug_flag:
+        debug_hook(exception_type, exception, traceback)
+    else:
+        print ("%s: %s" % (exception_type.__name__, exception))
+
+sys.excepthook = exception_handler
 
 def main(args=None):
     """
@@ -26,8 +35,14 @@ def main(args=None):
         print('type \'tt --help\' for more information')
         
     if args['input']:
-        unparsed_thread_str = load_thread_file(args['input'])
-        parsed_thread = thread_parser(unparsed_thread_str, d=args['delimiter'])
+        try: 
+            unparsed_thread_str = load_thread_file(args['input'])
+            parsed_thread = thread_parser(unparsed_thread_str, d=args['delimiter'])
+
+        except Exception as e:
+            print (str(e))
+            sys.exit()
+
         if not args['dry']:
             json_thread = {'TWEETS': []}
             for status in parsed_thread:
