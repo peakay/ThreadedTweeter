@@ -1,0 +1,7 @@
+{{{./test_data/fox.jpg}}}{{{./test_data/otter.jpg}}}
+---
+{{{./test_data/pig.jpg}}}
+---
+{{{./test_data/dog.jpg}}}{{{./test_data/pig.jpg}}}{{{./test_data/otter.jpg}}}{{{./test_data/fox.jpg}}}{{{./test_data/panda.jpg}}}
+---
+{{{./test_data/pig.jpg}}}{{{./test_data/panda.jpg}}}
