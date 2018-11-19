@@ -13,7 +13,7 @@ import sys
 # who needs fancy staging libraries
 STAGE = 'DEV'
 MODE = 'CLIENT'
-THREADED_TWEETER_URL = 'https://api.threadedtweeter.com'
+THREADED_TWEETER_URL = 'https://api.threadedtweeter.com/v1'
 
 
 # pathing stuff for json file
