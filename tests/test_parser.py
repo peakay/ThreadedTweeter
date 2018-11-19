@@ -9,7 +9,7 @@ def test_thread_parser(input_str, output_list):
 '''
 
 #Test that a simple thread is parsed as expected
-def test_parsing():
+def test_parsing_basic():
     with open('./test_data/test_parser_1_input', 'r') as myfile:
         thread_1 = myfile.read()
     sep_1 = "---"
@@ -23,7 +23,7 @@ def test_parsing():
     assert (parsed_thread_1[3].tweet) == solutions_1[3].strip()
     
 #Test that an empty block in a thread is thrown out and other tweets are kept
-def test_parsing_2():
+def test_parsing_empty_block():
     with open('./test_data/test_parser_2_input', 'r') as myfile:
         thread_2 = myfile.read()
     sep_1 = "---"
@@ -36,7 +36,7 @@ def test_parsing_2():
     assert (parsed_thread_2[2].tweet) == solutions_2[2].strip()
 
 #Test that media ids wrapped with {{{}}} are properly parsed
-def test_parsing_3():
+def test_parsing_media_ids():
     with open('./test_data/test_parser_3_input', 'r') as myfile:
         thread_3 = myfile.read()
     sep_1 = "---"
@@ -54,7 +54,7 @@ def test_parsing_3():
     assert len(parsed_thread_3[3].medias) == int(solutions_3[7])
 
 #Test that far too long tweets throw exceptions as expected 
-def test_parsing_4():
+def test_parsing_too_long():
     try:
         with open('./test_data/test_parser_4_input', 'r') as myfile:
             thread_4 = myfile.read()
