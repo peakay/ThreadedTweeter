@@ -1,7 +1,6 @@
 import requests
 from .file_handler import load_thread_file, load_media_file
-from .config import THREADED_TWEETER_URL
-
+from .tt_url import THREADED_TWEETER_URL
 
 S3_BASE_URL = 'https://s3.amazonaws.com/threadtweeter-media'
 
