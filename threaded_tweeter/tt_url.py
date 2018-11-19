@@ -1,1 +1,1 @@
-THREADED_TWEETER_URL = 'https://api.threadedtweeter.com'
+THREADED_TWEETER_URL = 'https://api.threadedtweeter.com/v1'
