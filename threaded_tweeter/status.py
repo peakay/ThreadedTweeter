@@ -1,6 +1,7 @@
 import requests
 from .file_handler import load_thread_file, load_media_file
-from .config import THREADED_TWEETER_URL
+from .tt_url import THREADED_TWEETER_URL
+import ntpath
 
 
 S3_BASE_URL = 'https://s3.amazonaws.com/threadtweeter-media'
@@ -13,11 +14,14 @@ class Status:
         self.uploaded_medias = []
     def upload_media_to_s3(self):
         for media in self.medias:
-            post_form_data = requests.get(f'{THREADED_TWEETER_URL}/upload').json()
+            post_form_data = requests.get(f'{THREADED_TWEETER_URL}/upload')
+            post_form_data.raise_for_status()
+            post_form_data = post_form_data.json()
             files={'file': media}
             post_res = requests.post(post_form_data['url'], data=post_form_data['fields'], files=files)
-            post_res.raise_on_status()
-            self.uploaded_medias.append(f'{S3_BASE_URL}/{post_form_data["fields"]["key"][:-12]}/{media.name}')
+            post_res.raise_for_status()
+            file_name = path_leaf(media.name)
+            self.uploaded_medias.append(f'{S3_BASE_URL}/{post_form_data["fields"]["key"][:-12]}/{file_name}')
     def convert_to_dict(self):
         return {
             'STATUS': self.tweet,
@@ -25,3 +29,8 @@ class Status:
         }
     def __str__(self):
         return f'Status: {self.tweet}\nImage: {self.paths}'
+
+def path_leaf(path):
+    # helper function to retrieve file name from a path in an os agnostic fashion
+    head, tail = ntpath.split(path)
+    return tail or ntpath.basename(head)

@@ -6,6 +6,7 @@ from os import path
 import json
 import hashlib
 import sys
+from .tt_url import THREADED_TWEETER_URL
 
 #module mostly written by trent
 #key retrieval process has some basis in https://github.com/bear/python-twitter get_access_token.py
@@ -13,8 +14,6 @@ import sys
 # who needs fancy staging libraries
 STAGE = 'DEV'
 MODE = 'CLIENT'
-THREADED_TWEETER_URL = 'https://api.threadedtweeter.com/v1'
-
 
 # pathing stuff for json file
 basepath = path.dirname(__file__)
