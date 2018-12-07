@@ -55,7 +55,7 @@ def main(args=None):
                 return f'Failed to post thread: {json.loads(res.content.decode())["errorMessage"]}'
             res = json.loads(res.content.decode())
             for i, tweet in enumerate(res, start=1):
-                print(f'#{i}: {tweet}')
+                print(f'#{i}: {tweet["body"]}')
         else:
             # implement dry run
             for i, status in enumerate(parsed_thread, start=1):
