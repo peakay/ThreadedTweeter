@@ -14,9 +14,12 @@ class Status:
         self.uploaded_medias = []
     def upload_media_to_s3(self):
         for media in self.medias:
-            post_form_data = requests.get(f'{THREADED_TWEETER_URL}/upload').json()
+            post_form_data = requests.get(f'{THREADED_TWEETER_URL}/upload')
+            post_form_data.raise_for_status()
+            post_form_data = post_form_data.json()
             files={'file': media}
             post_res = requests.post(post_form_data['url'], data=post_form_data['fields'], files=files)
+            post_res.raise_for_status()
             file_name = path_leaf(media.name)
             self.uploaded_medias.append(f'{S3_BASE_URL}/{post_form_data["fields"]["key"][:-12]}/{file_name}')
     def convert_to_dict(self):
