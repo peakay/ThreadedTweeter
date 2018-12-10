@@ -26,8 +26,8 @@ def main(args=None):
     argparser.add_argument('-i', '--input', help='Path of thread file relative to current working directory', type=str)
     argparser.add_argument('-d', '--delimiter', help='Specify desired delimiter. Default: ---', default='---', type=str)
     argparser.add_argument('-n', '--dry', help='Checks thread for errors. Does not post to Twitter!', action='store_true')
-    argparser.add_argument('-r', '--remove', 
-                           help='Deletes all replies from your user in a thread following the given status ID', type=str)
+    #argparser.add_argument('-r', '--remove', 
+    #                       help='Deletes all replies from your user in a thread following the given status ID', type=str)
     args = vars(argparser.parse_args())
     
     if not len(sys.argv) > 1:
@@ -46,7 +46,10 @@ def main(args=None):
         if not args['dry']:
             json_thread = {'TWEETS': []}
             for status in parsed_thread:
-                status.upload_media_to_s3()
+                try:
+                    status.upload_media_to_s3()
+                except requests.exceptions.HTTPError as e:
+                    return f'Failed to post thread: {json.loads(res.content.decode())["errorMessage"]}'
                 json_thread['TWEETS'].append(status.convert_to_dict())
             try:
                 res = requests.post(f'{THREADED_TWEETER_URL}/post-thread', data=json.dumps(json_thread), cookies=TWITTER_CREDS)
@@ -55,7 +58,7 @@ def main(args=None):
                 return f'Failed to post thread: {json.loads(res.content.decode())["errorMessage"]}'
             res = json.loads(res.content.decode())
             for i, tweet in enumerate(res, start=1):
-                print(f'#{i}: {tweet}')
+                print(f'#{i}: {tweet["body"]}')
         else:
             # implement dry run
             for i, status in enumerate(parsed_thread, start=1):
