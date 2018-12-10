@@ -24,7 +24,7 @@ def main(args=None):
     """
     argparser = argparse.ArgumentParser(prog='ThreadedTweeter')
     argparser.add_argument('-i', '--input', help='Path of thread file relative to current working directory', type=str)
-    argparser.add_argument('-d', '--delimiter', help='Specify desired delimiter. Default: ---', default='---', type=str)
+    argparser.add_argument('-d', '--delimiter', help='Specify desired delimiter. tt expects the delimiter followed by a newline. Default: ---', default='---', type=str)
     argparser.add_argument('-n', '--dry', help='Checks thread for errors. Does not post to Twitter!', action='store_true')
     #argparser.add_argument('-r', '--remove', 
     #                       help='Deletes all replies from your user in a thread following the given status ID', type=str)
